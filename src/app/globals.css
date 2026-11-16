@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   LifeArchive design tokens
+   Single source of truth. Components consume these via Tailwind utilities
+   (bg-surface, text-fg-muted, rounded-card, shadow-soft, ...).
+   ========================================================================== */
+
+@theme {
+  /* Background */
+  --color-base: #080a20;
+  --color-raised: #111438;
+
+  /* Surfaces */
+  --color-surface: #191b45;
+  --color-surface-2: #22234d;
+
+  /* Accents */
+  --color-accent: #9465ff;
+  --color-accent-2: #b58aff;
+  --color-accent-3: #d4b5ff;
+  --color-accent-pink: #f0a8e8;
+
+  /* Text */
+  --color-fg: #f8f7ff;
+  --color-fg-muted: #a9a9c7;
+  --color-fg-subtle: #777a9e;
+
+  /* Hairlines (restrained borders) */
+  --color-line: rgb(212 181 255 / 0.1);
+  --color-line-strong: rgb(212 181 255 / 0.2);
+
+  /* Fonts (variables injected by next/font in layout.tsx) */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-manrope), var(--font-inter), ui-sans-serif, sans-serif;
+  --font-heading: var(--font-jakarta), var(--font-inter), ui-sans-serif, sans-serif;
+
+  /* Radii */
+  --radius-control: 0.875rem;
+  --radius-card: 1.25rem;
+  --radius-panel: 1.75rem;
+
+  /* Shadows: soft, never neon */
+  --shadow-soft: 0 8px 30px rgb(4 5 20 / 0.35);
+  --shadow-lift: 0 18px 50px rgb(4 5 20 / 0.5);
+  --shadow-brand: 0 10px 30px rgb(121 86 255 / 0.28);
+
+  /* Motion */
+  --ease-calm: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Primary brand gradient */
+@utility bg-brand {
+  background-image: linear-gradient(110deg, #7956ff, #b36cff, #e2a0f5);
+}
+@utility text-brand {
+  background-image: linear-gradient(110deg, #7956ff, #b36cff, #e2a0f5);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Restrained glass: used only for overlays and floating chrome */
+@utility glass {
+  background: rgb(25 27 69 / 0.6);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  border: 1px solid var(--color-line);
+}
+
+/* Ambient page backdrop: deep navy with one soft violet bloom */
+@utility bg-ambient {
+  background-color: var(--color-base);
+  background-image:
+    radial-gradient(60rem 36rem at 85% -10%, rgb(148 101 255 / 0.16), transparent 60%),
+    radial-gradient(48rem 30rem at -10% 110%, rgb(240 168 232 / 0.07), transparent 60%),
+    linear-gradient(180deg, var(--color-base), var(--color-raised));
+}
+
+/* ---- Typography scale ---------------------------------------------------- */
+@utility type-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+}
+@utility type-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+}
+@utility type-heading {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  font-size: 1.25rem;
+}
+@utility type-body {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+@utility type-small {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+@utility type-caption {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+/* ---- Base ---------------------------------------------------------------- */
+html {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-base);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgb(148 101 255 / 0.4);
+  color: var(--color-fg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-2);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---- Landing ambience ---------------------------------------------------- */
+@keyframes la-twinkle {
+  0%, 100% { opacity: var(--tw-o, 0.3); }
+  50% { opacity: 1; }
+}
+.la-twinkle {
+  animation: la-twinkle 5s ease-in-out infinite;
+}
+@keyframes la-drift {
+  0%, 100% { transform: translateX(-30px); }
+  50% { transform: translateX(30px); }
+}
+.la-drift { animation: la-drift 26s ease-in-out infinite; }
+.la-drift-slow { animation: la-drift 40s ease-in-out infinite reverse; }
+
+@keyframes la-bob {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+.la-bob { animation: la-bob 2.4s ease-in-out infinite; }
+
+html { scroll-behavior: smooth; }
+[id] { scroll-margin-top: 6rem; }
+
+/* Per-user "Reduce motion" preference (Settings > Appearance) */
+[data-reduce-motion="true"] *,
+[data-reduce-motion="true"] *::before,
+[data-reduce-motion="true"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+@keyframes la-fade {
+  from { opacity: 0; transform: scale(1.02); }
+  to { opacity: 1; transform: scale(1); }
+}
